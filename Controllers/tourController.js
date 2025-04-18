@@ -1,4 +1,5 @@
 const Tour = require("../Models/TourModel");
+const APIFeatures = require("../Utils/apiFeatures");
 const AppError = require("../Utils/appError");
 const catchAsync = require('../Utils/catchAsync')
 
@@ -17,24 +18,23 @@ exports.createTour = catchAsync(async (req, res,next) => {
    
 })
 
-exports.getAllTour = async (req, res) => {
-  try {
-    const allTours = await Tour.find();
- 
-    
-    res.json({
-      staus: "Success",
-      data: {
-        tour: allTours,
-      },
-    });
-  } catch (error) {
-    res.status(400).json({
-      staus: "Fail",
-      message: error,
-    });
-  }
-};
+exports.getAllTours = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(Tour.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const tours = await features.query;
+
+  // SEND RESPONSE
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      tours
+    }
+  });
+});
 
 exports.getTour = catchAsync(async (req, res,next) => {
 
