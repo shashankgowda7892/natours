@@ -17,7 +17,7 @@ const createSendToken = (user,statusCode,res) =>{
   
   
   const cookieOptions = {
-    expiresIn : new Date(Date.noe + process.env.JWT_COOKIE_EXPIRES *24 * 60* 60 *1000),
+    expiresIn : new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES *24 * 60* 60 *1000),
     // secure : true,
     httpOnly : true
   }
@@ -103,7 +103,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 // Adding restriction on some features
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    if (!role.include(req.user.role)) {
+    if (!role.includes(req.user.role)) {
       return next(
         new AppError("Do not have permission to perfrom the action", 403)
       );
@@ -121,7 +121,8 @@ exports.forgotPassword = async (req, res, next) => {
 
   const resetToken = user.createPasswordResetPassoword();
 
-  const resetUrl = `${req.protocol}://$[req.get('host)`;
+  const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+
 
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordconfirm to :${resetUrl} .\nIf you didn't forgot yout passwrod, please ignore theis email`;
   try {
@@ -162,7 +163,7 @@ exports.resetPassword = async (req, res, next) => {
   }
 
   user.password = req.body.password
-  user.password = req.body.passwordConfirm
+  user.passwordConfirm = req.body.passwordConfirm
   user.passwordresetToken = undefined
   user.passwordResetExpires = undefined
 

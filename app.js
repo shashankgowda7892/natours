@@ -10,6 +10,7 @@ const tourRouter = require("./Routes/tourRoutes");
 const userRouter = require("./Routes/userRoutes");
 const GlobalErrorHandler = require("./Controllers/errorController");
 
+console.log("here");
 const app = express();
 
 
@@ -17,10 +18,10 @@ const app = express();
 app.use(express.json({limit : '10kb'}));
 
 // Data sanitization against No SQL Query Injection
-app.use(mongoSanitize())
+// app.use(mongoSanitize())
 
-// Data sanitization XSS
-app.use(xss())
+// // Data sanitization XSS
+// app.use(xss())
 
 app.use(express.static(`${__dirname}/public`));
 
