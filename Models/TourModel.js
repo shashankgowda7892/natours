@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const User =  require('./userModel')
+const User =  require('./userModel')
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -80,7 +80,7 @@ const tourSchema = new mongoose.Schema({
   guides :[
     {
       type : mongoose.Schema.ObjectId,    //?? Chid reference
-      ref : 'Users'
+      ref : 'user'
     }
   ]
 });
