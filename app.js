@@ -16,7 +16,7 @@ const app = express();
 
 
 
-app.use(express.json({limit : '10kb'}));
+app.use(express.json({limit : '500kb'}));
 
 // Data sanitization against No SQL Query Injection
 // app.use(mongoSanitize())

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+// const User =  require('./userModel')
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -53,7 +53,47 @@ const tourSchema = new mongoose.Schema({
     select: false,
   },
   startDates: [Date],
+  startLocation :{
+      type :  {
+        type : String,
+        default : 'Point',
+        enum : ["Point"]
+      },
+      coordinates : [Number],
+      address : String,
+      description : String
+  },
+  locations : [
+    {
+      type :  {
+        type : String,
+        default : 'Point',
+        enum : ["Point"]
+      },
+      coordinates : [Number],
+      address : String,
+      description : String,
+      day : Number
+    }
+  ],
+  // guides : Array  ??? embeded reference
+  guides :[
+    {
+      type : mongoose.Schema.ObjectId,    //?? Chid reference
+      ref : 'Users'
+    }
+  ]
 });
+
+
+
+// tourSchema.pre('save', async function(next){
+//   const guidePromises = this.guides.map(async id => await User.findById(id)) 
+//   console.log(guidePromises);
+  
+//   this.guides = await Promise.all(guidePromises)
+//   next()
+// })
 
 const Tour = mongoose.model("Tour", tourSchema);
 
