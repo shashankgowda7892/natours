@@ -5,10 +5,12 @@ const helmet = require("helmet")
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require("hpp")
+const mongoose = require('mongoose')
 
 const AppError = require("./Utils/appError");
 const tourRouter = require("./Routes/tourRoutes");
 const userRouter = require("./Routes/userRoutes");
+const reviewRouter = require("./Routes/reviewRoutes");
 const GlobalErrorHandler = require("./Controllers/errorController");
 
 console.log("here");
@@ -16,7 +18,7 @@ const app = express();
 
 
 
-app.use(express.json({limit : '500kb'}));
+app.use(express.json({limit : '900kb'}));
 
 // Data sanitization against No SQL Query Injection
 // app.use(mongoSanitize())
@@ -57,10 +59,12 @@ const limiter = rateLimit({
   message :'Too mant request from this IP Try again in an hour'
 })
 app.use('/api',limiter)
+mongoose.set('strictPopulate', false);
 
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users",userRouter)
+app.use('/api/v1/reviews',reviewRouter)
 
 // Error handling in UnKnown Route
 app.all("{*path}", (req, res, next) => {

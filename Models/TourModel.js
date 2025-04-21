@@ -80,12 +80,28 @@ const tourSchema = new mongoose.Schema({
   guides :[
     {
       type : mongoose.Schema.ObjectId,    //?? Chid reference
-      ref : 'user'
+      ref : 'User'
     }
-  ]
+  ],
+  reviews :[
+    {
+      type : mongoose.Schema.ObjectId,    //?? Chid reference
+      ref : 'Review'
+    }
+  ],
+
+
+},
+{
+  toJSON : {virtuals : true},
+  toObject : {virtuals : true},
 });
 
-
+tourSchema.virtual('Reviews',{
+  ref : 'Review',
+  foreignField :  'tour',
+  localField : '_id'
+})
 
 // tourSchema.pre('save', async function(next){
 //   const guidePromises = this.guides.map(async id => await User.findById(id)) 
