@@ -101,7 +101,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 // Adding restriction on some features
-exports.restrictTo = (...roles) => {
+exports.restrictTo = (...role) => {
   return (req, res, next) => {
     if (!role.includes(req.user.role)) {
       return next(

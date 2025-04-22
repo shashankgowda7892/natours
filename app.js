@@ -5,6 +5,7 @@ const helmet = require("helmet")
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require("hpp")
+const queryParser = require('express-query-parser');
 const mongoose = require('mongoose')
 
 const AppError = require("./Utils/appError");
@@ -13,10 +14,7 @@ const userRouter = require("./Routes/userRoutes");
 const reviewRouter = require("./Routes/reviewRoutes");
 const GlobalErrorHandler = require("./Controllers/errorController");
 
-console.log("here");
 const app = express();
-
-
 
 app.use(express.json({limit : '900kb'}));
 
@@ -45,8 +43,7 @@ app.use(helmet())
 
 
 app.use((req, res, next) => {
-  // console.log(req.headers);
-  
+
   next();
 });
 app.use(morgan("dev"));
