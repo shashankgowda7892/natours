@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const User =  require('./userModel')
+const User =  require('./userModel');
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -11,10 +11,12 @@ const tourSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Must have Duration"],
   },
-  ratingAverage: {
+  ratingAverage: {  
     type: Number,
     required: true,
     default: 4.5,
+    // Rounding value 
+    set : val => Math.round(val * 10)/10
   },
   ratingQuantity: {
     type: Number,
@@ -97,19 +99,24 @@ const tourSchema = new mongoose.Schema({
   toObject : {virtuals : true},
 });
 
+
+tourSchema.index({price : 1 })
+
+
+
 tourSchema.virtual('Reviews',{
   ref : 'Review',
   foreignField :  'tour',
   localField : '_id'
 })
 
-// tourSchema.pre('save', async function(next){
-//   const guidePromises = this.guides.map(async id => await User.findById(id)) 
-//   console.log(guidePromises);
+tourSchema.pre('save', async function(next){
+  const guidePromises = this.guides.map(async id => await User.findById(id)) 
+
   
-//   this.guides = await Promise.all(guidePromises)
-//   next()
-// })
+  this.guides = await Promise.all(guidePromises)
+  next()
+})
 
 const Tour = mongoose.model("Tour", tourSchema);
 
