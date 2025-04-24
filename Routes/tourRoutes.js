@@ -1,9 +1,16 @@
 const express = require("express");
 const tourController = require("../Controllers/tourController");
 const authController = require("../Controllers/authController");
+const reviewRouter = require('./reviewRoutes')
 
 const router = express.Router();
 
+
+router.use('/:tourId/reviews',reviewRouter)
+
+router.route('/tour-within/:distance/center/:latlng/unit/:unit').get(tourController.getToursWithin)
+
+router.route('/distances/:latlng/unit/:unit').get(tourController.getDistances)
 router
   .route("/")
   .get(authController.protect, tourController.getAllTours)
